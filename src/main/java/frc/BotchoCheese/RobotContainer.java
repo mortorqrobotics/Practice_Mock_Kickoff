@@ -23,8 +23,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import frc.BotchoCheese.Commands.RotateToTag;
-import frc.BotchoCheese.Commands.StrafeToTag;
 import frc.BotchoCheese.Constants.RobotMap;
 import frc.BotchoCheese.Constants.TunerConstants;
 import frc.BotchoCheese.Constants.TunerConstantsOld;
@@ -109,7 +107,6 @@ public class RobotContainer {
 
         // reset the field-centric heading on left bumper press
         joystick.leftBumper().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));
-        joystick.x().onTrue(Commands.sequence(new RotateToTag(drivetrain, 0), new StrafeToTag(drivetrain, 0.5)));
 
         drivetrain.registerTelemetry(logger::telemeterize);
     }
