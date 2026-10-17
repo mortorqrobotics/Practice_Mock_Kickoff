@@ -25,7 +25,6 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.BotchoCheese.Constants.RobotMap;
 import frc.BotchoCheese.Constants.TunerConstants;
-import frc.BotchoCheese.Constants.TunerConstantsOld;
 import frc.BotchoCheese.Subsystems.CommandSwerveDrivetrain;
 
 
@@ -47,6 +46,9 @@ public class RobotContainer {
     private final Telemetry logger = new Telemetry(MaxSpeed);
 
     private final static CommandXboxController joystick = new CommandXboxController(0);
+    private final static CommandXboxController joystickTwo = new CommandXboxController(1);
+
+    // TODO: Create objects representing the subsystems.
     
     public final static CommandSwerveDrivetrain drivetrain = createDrivetrain();
     public static Pigeon2 gyro = new Pigeon2(RobotMap.PIGEON_ID);
@@ -111,6 +113,9 @@ public class RobotContainer {
         drivetrain.registerTelemetry(logger::telemeterize);
     }
     
+    private void configureOperatorBindings() {
+        // TODO: Configure the controller bindings of joystickTwo based on your Subsystem Commands.
+    }
     
     public static double getRobotSpeed() {
         
@@ -132,10 +137,10 @@ public class RobotContainer {
 
     public static CommandSwerveDrivetrain createDrivetrain() {
         return new CommandSwerveDrivetrain(
-            TunerConstantsOld.DrivetrainConstants, 0,
+            TunerConstants.DrivetrainConstants, 0,
             VecBuilder.fill(RobotMap.kPositionStdDevX, RobotMap.kPositionStdDevY, Units.degreesToRadians(RobotMap.kPositionStdDevTheta)),
             VecBuilder.fill(RobotMap.kVisionStdDevX, RobotMap.kVisionStdDevY, Units.degreesToRadians(RobotMap.kVisionStdDevTheta)),
-            TunerConstantsOld.FrontLeft, TunerConstantsOld.FrontRight, TunerConstantsOld.BackLeft, TunerConstantsOld.BackRight
+            TunerConstants.FrontLeft, TunerConstants.FrontRight, TunerConstants.BackLeft, TunerConstants.BackRight
         );
     }
 }
