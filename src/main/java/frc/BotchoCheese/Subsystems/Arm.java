@@ -12,7 +12,7 @@ import frc.BotchoCheese.Constants.RobotMap;
 public class Arm extends SubsystemBase {
     private double extendPercent = 0.5;
     private double retractPercent = -0.5;
-    // TODO: Add a TalonFX motor and DutyCycleOut.
+    // TODO: Add a TalonFX motor and DutyCycleOut. (DONE)
     private final TalonFX armMotor = new TalonFX(RobotMap.ARM_MOTOR_ID);
     private final DutyCycleOut armRequest = new DutyCycleOut(0);
         public Arm() {
@@ -27,11 +27,11 @@ public class Arm extends SubsystemBase {
             
             config.MotorOutput.NeutralMode = NeutralModeValue.Brake;
 
-            // TODO: Replace motorName with the name of the motor you just made.
+            // TODO: Replace motorName with the name of the motor you just made.(DONE)
             armMotor.getConfigurator().apply(config);
         }
 
-    // TODO: Add Commands that allows the arm to extend (forward) or retract (backward).
+    // TODO: Add Commands that allows the arm to extend (forward) or retract (backward). (DONE)
     public void setPercent(double percent) {
         armMotor.setControl(armRequest.withOutput(percent));
     }
