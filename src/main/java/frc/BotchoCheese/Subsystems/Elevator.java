@@ -1,42 +1,75 @@
 package frc.BotchoCheese.Subsystems;
 
-import com.ctre.phoenix6.hardware.TalonFX;
-import com.ctre.phoenix6.signals.NeutralModeValue;
-import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.controls.DutyCycleOut;
+import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.InvertedValue;
+import com.ctre.phoenix6.signals.NeutralModeValue;
 
+import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.BotchoCheese.Constants.RobotMap;
 
 public class Elevator extends SubsystemBase {
-    // TODO: Add a TalonFX motor and DutyCycleOut.
     private final TalonFX motor = new TalonFX(RobotMap.ELEVATOR_MOTOR);
     private final DutyCycleOut dutyCycle = new DutyCycleOut(0);
+    private final DigitalInput bottomLimit = new DigitalInput(RobotMap.ELEVATOR_BOTTOM_LIMIT_DIO);
 
     public Elevator() {
-
-        // This configures the motor with specific limits for safety purposes.
         TalonFXConfiguration config = new TalonFXConfiguration();
 
-        config.CurrentLimits.StatorCurrentLimit = 60;
+        config.CurrentLimits.StatorCurrentLimit = RobotMap.ELEVATOR_STATOR_LIMIT;
         config.CurrentLimits.StatorCurrentLimitEnable = true;
-        config.CurrentLimits.SupplyCurrentLimit = 40;
+        config.CurrentLimits.SupplyCurrentLimit = RobotMap.ELEVATOR_SUPPLY_LIMIT;
         config.CurrentLimits.SupplyCurrentLimitEnable = true;
 
         config.MotorOutput.NeutralMode = NeutralModeValue.Brake;
+        config.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
 
-        // TODO: Replace motorName with the name of the motor you just made.
+        config.Voltage.PeakForwardVoltage = RobotMap.ELEVATOR_PEAK_VOLTAGE;
+        config.Voltage.PeakReverseVoltage = -RobotMap.ELEVATOR_PEAK_VOLTAGE;
+
+        config.OpenLoopRamps.DutyCycleOpenLoopRamp = RobotMap.ELEVATOR_RAMP_SECONDS;
+
+        config.SoftwareLimitSwitch.ForwardSoftLimitEnable = true;
+        config.SoftwareLimitSwitch.ForwardSoftLimitThreshold = RobotMap.ELEVATOR_MAX_ROTATIONS;
+        config.SoftwareLimitSwitch.ReverseSoftLimitEnable = true;
+        config.SoftwareLimitSwitch.ReverseSoftLimitThreshold = RobotMap.ELEVATOR_MIN_ROTATIONS;
+
         motor.getConfigurator().apply(config);
+        motor.setPosition(0);
     }
 
-    // TODO: Add Commands that allows the elevator to move up or down.
+    public boolean isAtBottom() {
+        return bottomLimit.get() != RobotMap.ELEVATOR_BOTTOM_LIMIT_INVERTED;
+    }
+
+    public boolean isAtTop() {
+        return getPosition() >= RobotMap.ELEVATOR_MAX_ROTATIONS;
+    }
+
+    public double getPosition() {
+        return motor.getPosition().getValueAsDouble();
+    }
+
+    private void setOutput(double output) {
+        if (output < 0 && isAtBottom()) {
+            output = 0;
+        }
+        if (output > 0 && isAtTop()) {
+            output = 0;
+        }
+        motor.setControl(dutyCycle.withOutput(output));
+    }
+
     public void moveUp() {
-        motor.setControl(dutyCycle.withOutput(0.5));
+        setOutput(RobotMap.ELEVATOR_UP_SPEED);
     }
 
-    public void moveDown () {
-        motor.setControl(dutyCycle.withOutput(-0.5));
+    public void moveDown() {
+        setOutput(RobotMap.ELEVATOR_DOWN_SPEED);
     }
 
     public void stop() {
@@ -44,15 +77,24 @@ public class Elevator extends SubsystemBase {
     }
 
     public Command moveUpCommand() {
-        return run(() -> moveUp());
+        return runEnd(this::moveUp, this::stop);
     }
 
     public Command moveDownCommand() {
-        return run(() -> moveDown());
+        return runEnd(this::moveDown, this::stop);
     }
 
-    public Command StopCommand() {
-        return run(() -> stop());
+    public Command stopCommand() {
+        return runOnce(this::stop);
     }
 
+    @Override
+    public void periodic() {
+        if (isAtBottom()) {
+            motor.setPosition(RobotMap.ELEVATOR_MIN_ROTATIONS);
+        }
+        SmartDashboard.putNumber("Elevator/Position", getPosition());
+        SmartDashboard.putBoolean("Elevator/AtBottom", isAtBottom());
+        SmartDashboard.putBoolean("Elevator/AtTop", isAtTop());
+    }
 }
