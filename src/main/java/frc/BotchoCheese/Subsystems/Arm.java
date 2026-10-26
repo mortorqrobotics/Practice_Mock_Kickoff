@@ -62,10 +62,14 @@ public class Arm extends SubsystemBase {
         });
 
     }
-    public void retract() {
-        setPercent(retractPercent);   // forward/outward
+    public Command retract() {
+        return this.run(() -> {
+        setPercent(retractPercent);   // forward/outward           
+        });
     }
-    public void stop() {
-        setPercent(0);
+    public Command stop() {
+        return this.run(() -> { 
+        setPercent(0);         
+        });
     }
 }
