@@ -11,7 +11,10 @@ import frc.BotchoCheese.Constants.RobotMap;
 
 public class Elevator extends SubsystemBase {
     // TODO: Add a TalonFX motor and DutyCycleOut.
-    public Arm() {
+    private final TalonFX motor = new TalonFX(RobotMap.ELEVATOR_MOTOR);
+    private final DutyCycleOut dutyCycle = new DutyCycleOut(0);
+
+    public Elevator() {
 
         // This configures the motor with specific limits for safety purposes.
         TalonFXConfiguration config = new TalonFXConfiguration();
@@ -24,8 +27,32 @@ public class Elevator extends SubsystemBase {
         config.MotorOutput.NeutralMode = NeutralModeValue.Brake;
 
         // TODO: Replace motorName with the name of the motor you just made.
-        motorName.getConfigurator().apply(config);
+        motor.getConfigurator().apply(config);
     }
 
     // TODO: Add Commands that allows the elevator to move up or down.
+    public void moveUp() {
+        motor.setControl(dutyCycle.withOutput(0.5));
+    }
+
+    public void moveDown () {
+        motor.setControl(dutyCycle.withOutput(-0.5));
+    }
+
+    public void stop() {
+        motor.setControl(dutyCycle.withOutput(0));
+    }
+
+    public Command moveUpCommand() {
+        return run(() -> moveUp());
+    }
+
+    public Command moveDownCommand() {
+        return run(() -> moveDown());
+    }
+
+    public Command StopCommand() {
+        return run(() -> stop());
+    }
+
 }
