@@ -1,3 +1,4 @@
+
 package frc.BotchoCheese.Constants;
 
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
@@ -20,8 +21,8 @@ public class RobotMap {
     public static final int ELEVATOR_MOTOR = 20;
     public static final int ELEVATOR_BOTTOM_LIMIT_DIO = 0;
 
-    public static final double ELEVATOR_UP_SPEED = 0.5;
-    public static final double ELEVATOR_DOWN_SPEED = -0.3;
+    public static final double ELEVATOR_UP_SPEED = 0.3; // To be Changed
+    public static final double ELEVATOR_DOWN_SPEED = -0.3; // To be Changed
     public static final double ELEVATOR_MAX_ROTATIONS = 30.0;
     public static final double ELEVATOR_MIN_ROTATIONS = 0.0;
     public static final double ELEVATOR_RAMP_SECONDS = 0.25;

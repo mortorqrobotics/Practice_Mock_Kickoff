@@ -93,6 +93,7 @@ public class Elevator extends SubsystemBase {
         if (isAtBottom()) {
             motor.setPosition(RobotMap.ELEVATOR_MIN_ROTATIONS);
         }
+
         SmartDashboard.putNumber("Elevator/Position", getPosition());
         SmartDashboard.putBoolean("Elevator/AtBottom", isAtBottom());
         SmartDashboard.putBoolean("Elevator/AtTop", isAtTop());
