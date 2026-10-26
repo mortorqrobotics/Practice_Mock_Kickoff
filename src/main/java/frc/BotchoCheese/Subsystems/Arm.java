@@ -56,8 +56,11 @@ public class Arm extends SubsystemBase {
     public void setPercent(double percent) {
         armMotor.setControl(armRequest.withOutput(percent));
     }
-    public void extend() {
-        setPercent(extendPercent);   // forward/outward
+    public Command extend() {
+        return this.run(() -> {
+        ArmMotor.setPercent(extendPercent);   // forward/outward            
+        });
+
     }
     public void retract() {
         setPercent(retractPercent);   // forward/outward
