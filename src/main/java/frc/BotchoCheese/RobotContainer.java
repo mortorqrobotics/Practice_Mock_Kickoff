@@ -55,8 +55,6 @@ public class RobotContainer {
 
     /* Path follower */
     private final SendableChooser<Command> autoChooser;
-    private Arm arm = new Arm();
-
 
     public RobotContainer() {
 
@@ -100,11 +98,6 @@ public class RobotContainer {
         joystick.pov(180).whileTrue(drivetrain.applyRequest(() ->
             forwardStraight.withVelocityX(-0.5).withVelocityY(0))
         );
-        joystick.leftTrigger().whileTrue(arm.retract());
-        joystick.rightTrigger().whileTrue(arm.extend());
-        joystick.leftBumper().onTrue(arm.stop());
-        joystick.rightBumper().onTrue(arm.stop());
-
         
 
         // Run SysId routines when holding back/start and X/Y.
@@ -150,5 +143,4 @@ public class RobotContainer {
             TunerConstants.FrontLeft, TunerConstants.FrontRight, TunerConstants.BackLeft, TunerConstants.BackRight
         );
     }
-    
 }
