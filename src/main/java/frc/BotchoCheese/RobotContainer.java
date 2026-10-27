@@ -48,6 +48,7 @@ public class RobotContainer {
     public static Pigeon2 gyro = new Pigeon2(RobotMap.PIGEON_ID);
 
     public final Elevator elevator = new Elevator();
+    public final Arm arm = new Arm();
 
     private final SendableChooser<Command> autoChooser;
 
@@ -94,10 +95,17 @@ public class RobotContainer {
 
         joystick.leftBumper().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));
 
-        joystickTwo.y().whileTrue(elevator.moveUpCommand());
-        joystickTwo.b().whileTrue(elevator.moveDownCommand());
+        joystick.y().whileTrue(elevator.moveUpCommand());
+        joystick.b().whileTrue(elevator.moveDownCommand());
 
         drivetrain.registerTelemetry(logger::telemeterize);
+    }
+
+    private void ConfigureOperatorBindings() {
+        joystickTwo.leftTrigger().whileTrue(arm.retract());
+        joystickTwo.rightTrigger().whileTrue(arm.extend());
+        joystickTwo.leftBumper().onTrue(arm.stop());
+        joystickTwo.rightBumper().onTrue(arm.stop());
     }
 
     public static double getRobotSpeed() {
