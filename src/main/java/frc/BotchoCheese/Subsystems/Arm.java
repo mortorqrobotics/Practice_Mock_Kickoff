@@ -36,6 +36,7 @@ public class Arm extends SubsystemBase {
     // TODO: Add a TalonFX motor and DutyCycleOut. (DONE)
     private final TalonFX armMotor = new TalonFX(RobotMap.ARM_MOTOR_ID);
     private final DutyCycleOut armRequest = new DutyCycleOut(0);
+    
         public Arm() {
             
             // This configures the motor with specific limits for safety purposes.
@@ -72,4 +73,5 @@ public class Arm extends SubsystemBase {
         setPercent(0);         
         });
     }
+
 }
