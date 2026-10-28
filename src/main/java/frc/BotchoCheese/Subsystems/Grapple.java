@@ -18,7 +18,6 @@ public class Grapple extends SubsystemBase {
     public Grapple() {
         // This configures the motor with specific limits for safety purposes.
         TalonFXConfiguration config = new TalonFXConfiguration();
-
         config.CurrentLimits.StatorCurrentLimit = 60;
         config.CurrentLimits.StatorCurrentLimitEnable = true;
         config.CurrentLimits.SupplyCurrentLimit = 40;

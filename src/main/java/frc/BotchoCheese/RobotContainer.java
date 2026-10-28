@@ -52,7 +52,7 @@ public class RobotContainer {
     
     public final static CommandSwerveDrivetrain drivetrain = createDrivetrain();
     public static Pigeon2 gyro = new Pigeon2(RobotMap.PIGEON_ID);
-
+    public final Grapple grapple = new Grapple();
     /* Path follower */
     private final SendableChooser<Command> autoChooser;
 
@@ -115,8 +115,10 @@ public class RobotContainer {
     
     private void configureOperatorBindings() {
         // TODO: Configure the controller bindings of joystickTwo based on your Subsystem Commands.
+        joystick.leftTrigger().onTrue(grapple.moveUpCommand());
+        joystick.x().onTrue(grapple.moveDownCommand());
     }
-    
+
     public static double getRobotSpeed() {
         
         return joystick.getLeftTriggerAxis() >= 0.25 ? 0.1 : 1.0;

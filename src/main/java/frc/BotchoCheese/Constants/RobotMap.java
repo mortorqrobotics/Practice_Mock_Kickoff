@@ -24,4 +24,6 @@ public class RobotMap {
 
     //Gyro
     public static final int PIGEON_ID = 30;
+    //Grapple
+    public static final int GRAPPLE_MOTOR_ID = 128;
 }
