@@ -46,6 +46,8 @@ public class RobotContainer {
 
     public final static CommandSwerveDrivetrain drivetrain = createDrivetrain();
     public static Pigeon2 gyro = new Pigeon2(RobotMap.PIGEON_ID);
+    public final Grapple grapple = new Grapple();
+    /* Path follower */
 
     public final Elevator elevator = new Elevator();
     public final Arm arm = new Arm();
@@ -100,6 +102,11 @@ public class RobotContainer {
 
         drivetrain.registerTelemetry(logger::telemeterize);
     }
+    
+    private void configureOperatorBindings() {
+        // TODO: Configure the controller bindings of joystickTwo based on your Subsystem Commands.
+        joystick.leftTrigger().onTrue(grapple.moveUpCommand());
+        joystick.x().onTrue(grapple.moveDownCommand());
 
     private void ConfigureOperatorBindings() {
         joystickTwo.leftTrigger().whileTrue(arm.retract());
