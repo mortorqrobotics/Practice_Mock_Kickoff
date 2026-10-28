@@ -10,22 +10,47 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.BotchoCheese.Constants.RobotMap;
 
 public class Arm extends SubsystemBase {
-    // TODO: Add a TalonFX motor and DutyCycleOut.
-    public Arm() {
+    private double extendPercent = 0.5;
+    private double retractPercent = -0.5;
+    // TODO: Add a TalonFX motor and DutyCycleOut. (DONE)
+    private final TalonFX armMotor = new TalonFX(RobotMap.ARM_MOTOR_ID);
+    private final DutyCycleOut armRequest = new DutyCycleOut(0);
+    
+        public Arm() {
+            
+            // This configures the motor with specific limits for safety purposes.
+            TalonFXConfiguration config = new TalonFXConfiguration();
+            
+            config.CurrentLimits.StatorCurrentLimit = 60;
+            config.CurrentLimits.StatorCurrentLimitEnable = true;
+            config.CurrentLimits.SupplyCurrentLimit = 40;
+            config.CurrentLimits.SupplyCurrentLimitEnable = true;
+            
+            config.MotorOutput.NeutralMode = NeutralModeValue.Brake;
 
-        // This configures the motor with specific limits for safety purposes.
-        TalonFXConfiguration config = new TalonFXConfiguration();
+            // TODO: Replace motorName with the name of the motor you just made.(DONE)
+            armMotor.getConfigurator().apply(config);
+        }
 
-        config.CurrentLimits.StatorCurrentLimit = 60;
-        config.CurrentLimits.StatorCurrentLimitEnable = true;
-        config.CurrentLimits.SupplyCurrentLimit = 40;
-        config.CurrentLimits.SupplyCurrentLimitEnable = true;
+    // TODO: Add Commands that allows the arm to extend (forward) or retract (backward). (DONE)
+    public void setPercent(double percent) {
+        armMotor.setControl(armRequest.withOutput(percent));
+    }
+    public Command extend() {
+        return this.run(() -> {
+        ArmMotor.setPercent(extendPercent);   // forward/outward            
+        });
 
-        config.MotorOutput.NeutralMode = NeutralModeValue.Brake;
-
-        // TODO: Replace motorName with the name of the motor you just made.
-        motorName.getConfigurator().apply(config);
+    }
+    public Command retract() {
+        return this.run(() -> {
+        setPercent(retractPercent);   // forward/outward           
+        });
+    }
+    public Command stop() {
+        return this.run(() -> { 
+        setPercent(0);         
+        });
     }
 
-    // TODO: Add Commands that allows the arm to extend (forward) or retract (backward).
 }
