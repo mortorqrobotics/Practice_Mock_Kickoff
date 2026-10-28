@@ -65,34 +65,74 @@ public class Elevator extends SubsystemBase {
     }
 
     public void moveUp() {
-        setOutput(RobotMap.ELEVATOR_UP_SPEED);
+        motor.setOutput(RobotMap.ELEVATOR_UP_SPEED);
     }
 
     public void moveDown() {
-        setOutput(RobotMap.ELEVATOR_DOWN_SPEED);
+        motor.setOutput(RobotMap.ELEVATOR_DOWN_SPEED);
     }
+    //Not called
 
     public void stop() {
         motor.setControl(dutyCycle.withOutput(0));
     }
 
+    /*
     public Command moveUpCommand() {
         return runEnd(this::moveUp, this::stop);
     }
+    */
 
+    public Command moveUpCommand() {
+         if (isAtTop()) {
+            return this.startEnd(
+            () -> motor.setControl(dutyCycle.withOutput(0))),
+            () -> motor.setControl(dutyCycle.withOutput(0))
+            );
+        }
+
+        else {
+            return this.startEnd(
+                () -> motor.setControl(dutyCycle.withOutput(RobotMap.ELEVATOR_UP_SPEED))),
+                () -> motor.setControl(dutyCycle.withOutput(0))
+            );
+        }
+    }
+
+    /*
     public Command moveDownCommand() {
         return runEnd(this::moveDown, this::stop);
+    }
+    */
+
+    public Command moveDownCommand() {
+         if (isAtBottom()) {
+            return this.startEnd(
+            () -> motor.setControl(dutyCycle.withOutput(0))),
+            () -> motor.setControl(dutyCycle.withOutput(0))
+            );
+        }
+
+        else {
+            return this.startEnd(
+                () -> motor.setControl(dutyCycle.withOutput(RobotMap.ELEVATOR_DOWN_SPEED))),
+                () -> motor.setControl(dutyCycle.withOutput(0))
+            );
+        }
     }
 
     public Command stopCommand() {
         return runOnce(this::stop);
     }
+    //Stay to command syntax being used.
 
     @Override
     public void periodic() {
+        /*
         if (isAtBottom()) {
             motor.setPosition(RobotMap.ELEVATOR_MIN_ROTATIONS);
         }
+        Do not put functional robot-altering code besides SmartDasbboard values inside the periodic function*/
 
         SmartDashboard.putNumber("Elevator/Position", getPosition());
         SmartDashboard.putBoolean("Elevator/AtBottom", isAtBottom());
