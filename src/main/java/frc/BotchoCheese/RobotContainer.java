@@ -107,8 +107,7 @@ public class RobotContainer {
         // TODO: Configure the controller bindings of joystickTwo based on your Subsystem Commands.
         joystick.leftTrigger().onTrue(grapple.moveUpCommand());
         joystick.x().onTrue(grapple.moveDownCommand());
-
-    private void ConfigureOperatorBindings() {
+        
         joystickTwo.leftTrigger().whileTrue(arm.retract());
         joystickTwo.rightTrigger().whileTrue(arm.extend());
         joystickTwo.leftBumper().onTrue(arm.stop());
